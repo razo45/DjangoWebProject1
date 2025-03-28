@@ -7,8 +7,9 @@
     <div class="grid" style="text-align: center; background-color: rgb(44, 51, 56);">
         <p style="color: white;font-size: 40px;font-family: inherit;">Solar ITILIUM</p><p>
 
-        </p><form action="https://httpbin.org/post" method="POST" class="form login">
-
+        </p>
+        <form method="POST" class="form login">
+            {% csrf_token %}  <!-- Защита от атак CSRF -->
             <div class="form__field">
                 <label for="login__username">
                     <svg class="icon">
@@ -30,6 +31,11 @@
             <div class="form__field">
                 <input type="submit" value="Войти">
             </div>
+            <!-- Если есть ошибка, показываем -->
+            {% if error %}
+            <p style="color: red; font-size: 20px; font-family: inherit; margin: 0;">{{ error }}</p>
+            {% endif %}
+        
 
         </form>
 
