@@ -63,9 +63,11 @@
     <Content Include="app\static\app\css\header_style.css" />
     <Content Include="app\static\app\css\index_style.css" />
     <Content Include="app\static\app\css\Login_style.css" />
+    <Content Include="app\static\app\css\Open_Ticket_style.css" />
     <Content Include="app\static\app\Image\NoAvatar.jpg" />
     <Content Include="app\static\app\js\index_script.js" />
     <Content Include="app\templates\app\header.html" />
+    <Content Include="app\templates\app\Open_Ticket.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

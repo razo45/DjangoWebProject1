@@ -33,12 +33,22 @@ def home(request):
         }
     )
 
+@login_required
+def Open_Ticket(request):
+    return render(request, 'app/Open_Ticket.html')
 
+
+@login_required
 def logout_view(request):
     logout(request)# Выход из аккаунта
     return redirect("login_view")  # Перенаправление на страницу входа
 
+
 def login_view(request):
+
+    if request.user.is_authenticated:
+        return redirect("home")  # Перенаправляем авторизованного пользователя на главную страницу
+
     if request.method == "POST":
         username = request.POST.get("username")  # Получаем логин
         password = request.POST.get("password")  # Получаем пароль
@@ -47,7 +57,7 @@ def login_view(request):
 
         if user is not None:  # Если логин/пароль верные
             login(request, user)
-            return render(request, 'app/login.html', {"error": "Верный логин и пароль"})  # Ошибка  # Перенаправляем на главную страницу
+            return redirect("home") # Перенаправляем на главную страницу
         else:
             return render(request, 'app/login.html', {"error": "Неверный логин или пароль"})  # Ошибка
 
