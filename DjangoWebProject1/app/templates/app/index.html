@@ -27,7 +27,7 @@
                     <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
                 </svg>
             </button>
-            <button class="add-btn" title="Add New Project">
+            <button class="add-btn" title=" New Project">
                 <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -62,7 +62,7 @@
             </a>
             <button class="profile-btn">
                 <img src="/static/app/image/NoAvatar.jpg">
-                <span>admin</span>
+                <span>{{username}}</span>
             </button>
         </div>
         <button class="messages-btn">
@@ -96,10 +96,15 @@
               
             </div>
             <div class="project-boxes jsListView">
+
+
+                {% for incident in incidents  %}
+
+
                 <div class="project-box-wrapper">
                     <div class="project-box" style="background-color: #fee4cb;">
                         <div class="project-box-header">
-                            <span>27.03.2025 14:56:13</span>
+                            <span>{{incident.date}}</span>
                             <div class="more-wrapper">
                                 <button class="project-btn-more">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
@@ -111,11 +116,11 @@
                             </div>
                         </div>
                         <div class="project-box-content-header">
-                            <a href="{% url 'Open_Ticket' %}" class="box-content-header">0000005363</a>
-                            <p class="box-content-subheader">Не согласовано</p>
+                            <a href="{% url 'Open_Ticket' %}" class="box-content-header">{{incident.number}}</a>
+                            <p class="box-content-subheader">{{incident.state}}</p>
                         </div>
                         <div class="box-progress-wrapper">
-                            <p class="box-progress-header">Проблема с рабочим ноутбуком</p>
+                            <p class="box-progress-header">{{incident.topic}}</p>
                             <div class="box-progress-bar">
                                 <span class="box-progress" style="width: 100%; background-color: #ff942e"></span>
                             </div>
@@ -127,37 +132,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-box-wrapper">
-                    <div class="project-box" style="background-color: #fee4cb;">
-                        <div class="project-box-header">
-                            <span>27.03.2025 14:56:13</span>
-                            <div class="more-wrapper">
-                                <button class="project-btn-more">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
-                                        <circle cx="12" cy="12" r="1"></circle>
-                                        <circle cx="12" cy="5" r="1"></circle>
-                                        <circle cx="12" cy="19" r="1"></circle>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="project-box-content-header">
-                            <a href="{% url 'Open_Ticket' %}" class="box-content-header">0000005363</a>
-                            <p class="box-content-subheader">Не согласовано</p>
-                        </div>
-                        <div class="box-progress-wrapper">
-                            <p class="box-progress-header">Проблема с рабочим ноутбуком</p>
-                            <div class="box-progress-bar">
-                                <span class="box-progress" style="width: 100%; background-color: #ff942e"></span>
-                            </div>
 
-                        </div>
-                        <div class="project-box-footer">
-                            <p class="box-content-header" style="margin: 0;max-width: 150px;">Нерсесян Размик Самвелович</p>
-                            <p class="box-content-subheader" style="margin: 0;">Helpdesk (2-я линия)</p>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+
+
 
             </div>
         </div>

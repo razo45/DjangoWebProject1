@@ -1,4 +1,4 @@
-"""
+﻿"""
 Django settings for DjangoWebProject1 project.
 
 Based on 'django-admin startproject' using Django 2.1.2.
@@ -12,10 +12,32 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import posixpath
+import ldap
+from django_auth_ldap.config import LDAPSearch
+
+AUTH_LDAP_SERVER_URI = "ldap://10.201.42.10"  # ← замените на адрес вашего AD-сервера
+
+AUTH_LDAP_BIND_DN = "nrs"  # ← если нужно логиниться от имени сервиса
+AUTH_LDAP_BIND_PASSWORD = "Razo159753852!"
+
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    "OU=SolarSecurity,OU=Domain Users,DC=solar,DC=local",  # ← замените на ваш путь в AD
+    ldap.SCOPE_SUBTREE,
+    "(sAMAccountName=%(user)s)"  # ищем по логину
+)
+AUTH_LDAP_CREATE_USERS = True  # создаёт пользователя в Django, если авторизация успешна
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+AUTHENTICATION_BACKENDS = [
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AUTH_LDAP_USER_DN_TEMPLATE = "%(user)s@solar.local"
+AUTH_USER_MODEL = 'app.CustomUser'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LOGIN_URL = "/login/"  # ���� ����������� ���������������� �������������
+LOGIN_URL = "/login/"  # Куда редиректить неавторизованных пользователей
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
