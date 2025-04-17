@@ -56,35 +56,19 @@ def clean_html(text):
 
     return str(soup)
 
-@login_required
-def Open_Ticket(request, ticket_uuid):
-    all_incidents = extGetDetailIncidentInfo(ticket_uuid)
-    # Раскодируем HTML в каждом сообщении
-    for msg in all_incidents.get("TheHistoryOfCommunication", []):
-        msg["html_render"] = clean_html(msg.get("HTMLText", ""))
-    return render(
-        request, 
-        'app/Open_Ticket.html',
-        {
-            'message': '',
-            "username": request.user.username,
-            'incident_info': all_incidents,
 
-        }
-) # Страница подробной информации о тикете
+
 
 # === Блок Взаимодействия с API и обработка данныз === ↓
 
-def get_incidents_list(response): # Получение списка обращений пользователя 
+def get_incidents_list(initiator_uuid):  # <-- Переименовали параметр
     url = "http://m9-intalev-1c/ITIL/hs/externalapi/getIncidentsList"
     
-    # JSON-данные, которые ожидает API
     payload = {
-            "startFrom": "0",        
-            "initiatorUuid": response       
+        "startFrom": "0",        
+        "initiatorUuid": initiator_uuid  # <-- используем новый параметр
     }
 
-    # Учетные данные (замени на свои)
     username = "r.nersesyan"
     password = "1234"
 
@@ -96,10 +80,8 @@ def get_incidents_list(response): # Получение списка обраще
     )
 
     if response.status_code == 200:
-            f = json.loads(response.text)
-            array = list(f.values())
-            array1 = array[0]
-            return array1
+        f = json.loads(response.text)
+        return list(f.values())[0]
     else:
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
 
@@ -174,20 +156,20 @@ def extGetDetailIncidentInfo(request): # Получение информации
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    username = request.user.username  # Получаем логин пользователя
-
+    initiator_uuid = request.user.initiator_uuid
     default_avatar = static('app/image/NoAvatar.jpg')
-    incidents =list(get_incidents_list(request.user.initiator_uuid))
+    incidents =list(get_incidents_list(initiator_uuid))
     count_closed = sum(1 for incident in incidents if incident.get("state") == 'Закрыто')
     count_open = sum(1 for incident in incidents if incident.get("state") != 'Закрыто')
     count_all = len(incidents)
+
 
     return render(
         request,
         'app/index.html',
         {
             'message': '',
-            "username": username,
+            "user": request.user,
             "avatar": "",
             'default_avatar': default_avatar,
             'incidents': incidents,
@@ -198,6 +180,69 @@ def home(request):
         
 
     ) # Страница всех тикетов пользователя
+
+@login_required
+def Open_Ticket_Search(request):
+    if request.user.is_seach:
+        num = request.GET.get("uuid")
+        if num:
+
+
+            url = "http://m9-intalev-1c/ITIL/hs/externalapi/getIncidentsList"
+    
+            payload = {
+                "startFrom": "0",        
+                "number": num  # <-- используем новый параметр
+            }
+
+            username = "r.nersesyan"
+            password = "1234"
+
+            response = requests.post(
+                url,
+                json=payload,
+                auth=HTTPBasicAuth(username, password),
+                headers={"Content-Type": "application/json"}
+            )
+
+            if response.status_code == 200:
+                f = json.loads(response.text)
+                incidents =list(list(f.values())[0])
+                if len(incidents) > 0:
+                    uuid = incidents[0]["linkUuid"]
+                    return redirect("Open_Ticket", ticket_uuid=uuid)
+                else:
+                    return redirect("Whoops")
+            else:
+                return redirect("Whoops")
+    return redirect("home")
+
+@login_required
+def Whoops(request):
+
+    return render(request, 'app/Whoops.html')  # Если `GET`, просто показываем форму
+
+
+
+
+@login_required
+def Open_Ticket(request, ticket_uuid):
+    all_incidents = extGetDetailIncidentInfo(ticket_uuid)
+    # Раскодируем HTML в каждом сообщении
+    for msg in all_incidents.get("TheHistoryOfCommunication", []):
+        msg["html_render"] = clean_html(msg.get("HTMLText", ""))
+    return render(
+        request, 
+        'app/Open_Ticket.html',
+        {
+            'message': '',
+            "user": request.user,
+            'incident_info': all_incidents,
+
+        }
+) # Страница подробной информации о тикете
+
+
 
 @login_required
 def logout_view(request):
@@ -222,8 +267,6 @@ def login_view(request):
             user.save()
 
             login(request, user)
-
-
 
             return redirect("home") # Перенаправляем на главную страницу
         else:

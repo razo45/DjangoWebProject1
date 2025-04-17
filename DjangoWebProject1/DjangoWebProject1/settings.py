@@ -15,6 +15,8 @@ import posixpath
 import ldap
 from django_auth_ldap.config import LDAPSearch
 
+
+
 AUTH_LDAP_SERVER_URI = "ldap://10.201.42.10"  # ← замените на адрес вашего AD-сервера
 
 AUTH_LDAP_BIND_DN = "nrs"  # ← если нужно логиниться от имени сервиса
@@ -30,6 +32,7 @@ AUTH_LDAP_ALWAYS_UPDATE_USER = True
 
 AUTHENTICATION_BACKENDS = [
     'django_auth_ldap.backend.LDAPBackend',
+    'django_auth_adfs.backend.AdfsAuthCodeBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 AUTH_LDAP_USER_DN_TEMPLATE = "%(user)s@solar.local"
@@ -38,7 +41,7 @@ AUTH_USER_MODEL = 'app.CustomUser'
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGIN_URL = "/login/"  # Куда редиректить неавторизованных пользователей
-
+LOGIN_REDIRECT_URL = '/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -61,6 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_auth_adfs',
 ]
 
 # Middleware framework
@@ -82,7 +86,7 @@ ROOT_URLCONF = 'DjangoWebProject1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,6 +125,28 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+
+AUTH_ADFS = {
+    "SERVER": "adfs.yourcompany.com",
+    "CLIENT_ID": "your-client-id",
+    "RELYING_PARTY_ID": "your-relying-party-id",
+    "AUDIENCE": "microsoft:identityserver:your-relying-party-id",
+    "CA_BUNDLE": "/path/to/ca-bundle.pem",
+    "CLAIM_MAPPING": {
+        "first_name": "given_name",
+        "last_name": "family_name",
+        "email": "email",
+    },
+    "GROUP_CLAIM": "group",
+    "MIRROR_GROUPS": True,
+    "GROUP_TO_FLAG_MAPPING": {
+        "is_staff": ["Django Staff", "Other Django Staff"],
+        "is_superuser": "Django Admins",
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

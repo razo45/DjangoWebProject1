@@ -38,6 +38,9 @@
   <ItemGroup>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\admin.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -69,11 +72,20 @@
     <Content Include="app\static\app\css\index_style.css" />
     <Content Include="app\static\app\css\Login_style.css" />
     <Content Include="app\static\app\css\Open_Ticket_style.css" />
+    <Content Include="app\static\app\css\woops_style.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app\static\app\Image\NoAvatar.jpg" />
     <Content Include="app\static\app\js\index_script.js" />
+    <Content Include="app\static\app\js\woops_script.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="app\templates\app\header.html" />
     <Content Include="app\templates\app\Open_Ticket.html" />
     <Content Include="app\templates\app\partials\incidents_list.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="app\templates\app\Whoops.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="requirements.txt" />
