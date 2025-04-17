@@ -61,6 +61,7 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="app\templates\app\partials\" />
     <Folder Include="DjangoWebProject1\" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +73,9 @@
     <Content Include="app\static\app\js\index_script.js" />
     <Content Include="app\templates\app\header.html" />
     <Content Include="app\templates\app\Open_Ticket.html" />
+    <Content Include="app\templates\app\partials\incidents_list.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
     <Content Include="app\static\app\content\bootstrap.css" />
     <Content Include="app\static\app\content\bootstrap.min.css" />

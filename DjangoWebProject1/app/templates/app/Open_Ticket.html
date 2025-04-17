@@ -62,7 +62,7 @@
             </a>
             <button class="profile-btn">
                 <img src="/static/app/image/NoAvatar.jpg">
-                <span>admin</span>
+                <span>{{username}}</span>
             </button>
         </div>
         <button class="messages-btn">
@@ -75,52 +75,38 @@
 
         <div class="projects-section">
             <div class="projects-section-header">
-                <p>Заявка №2025032600003 — FW: [Ticket# 0104823] Solar SafeInspect::Проектная калькуляция / ООО "АиМ-Холдинг"</p>
+                <p>{{incident_info.topic}}</p>
 
             </div>
-   
             <div class="project-boxes jsListView">
+                {% for Message in incident_info.TheHistoryOfCommunication  %}
+
                 <div class="project-box-wrapper">
                     <div class="project-box" style="background-color: #fee4cb;">
 
 
+
+
+
+
+
                         <div class="box-progress-wrapper" style="max-width: -moz-available;">
-                            <p class="box-progress-header">Цимох Игорь Викторович</p>
+                            <p class="box-progress-header">{{Message.Autor}}</p>
+                            <span>{{Message.Data}}</span>
                             <div class="box-progress-bar">
                                 <span class="box-progress" style="width: 100%; background-color: #ff942e"></span>
                             </div>
-                            <div style="white-space: pre-wrap;  word-wrap: break-word;word-break: break-word;overflow-wrap: break-word;">
-                                Добрый день. Всё без изменений — пытается получить IP-адрес и «Нет ответа».
-                                С уважением, Игорь Цимох
+                            <div style="white-space: revert;  word-break: break-word;">
+                                {{ Message.html_render|safe}}
 
-
-
-                                From: Цимох Игорь Викторович
-                                Sent: Monday, March 24, 2025 11:39
-                                To: IT Helpdesk Solar &lt;ITHelpdesk@rt-solar.ru&gt;
-                                Subject: RE: Ваше Inc.#0000004272 "Телефон НЕ работает!" добавлено новое сообщение _external_
-
-                                Добрый день и спасибо за хлопоты. Дистанционно проверить НЕ могу, смогу проверить завтра в офисе.
-                                Можно позвонить по 1573, если вызов проходит — есть вероятность работоспособности, если же кто-то там снимет трубку/ответит — убедиться можно будет с большей вероятностью.
-                                С уважением, Игорь Цимох
-
-
-
-                                From: IT Helpdesk Solar &lt;ITHelpdesk@rt-solar.ru&gt;
-                                Sent: Monday, March 24, 2025 11:30
-                                To: Цимох Игорь Викторович &lt;i.tsimokh@rt-solar.ru&gt;
-                                Subject: Ваше Inc.#0000004272 "Телефон НЕ работает!" добавлено новое сообщение _external_
-
-                                Добрый день!
-                                вх.(24.03.2025 11:29:25) Зайцев Артём Сергеевич
-                                Прошу уточнить, проблема актуальна?
                             </div>
 
                         </div>
 
+
                     </div>
                 </div>
-
+                {% endfor %}
 
 
 
@@ -146,20 +132,15 @@
                             <div class="name">Информация о заявке</div>
 
                         </div>
-                        <p class="message-line">Тип: Инцидент</p>
-                        <p class="message-line">
-                            Приоритет:
-                            1 нормальный
-                        </p>
-                        <p class="message-line">Приоритет: 1 нормальный</p>
-                        <p class="message-line">
-                            Состояние:
-                            Зарегистрирована
-                        </p>
-                        <p class="message-line">
-                            Очередь:
-                            1С
-                        </p>
+                        <p class="message-line">Услуга: {{incident_info.service}}</p>
+                        <p class="message-line">Состав услуги: {{incident_info.serviceComponent}}</p>
+                        <p class="message-line">Тип: {{incident_info.type}}</p>
+                        <p class="message-line">Приоритет: {{incident_info.priority}}</p>
+                        <p class="message-line">Состояние: {{incident_info.state}} </p>
+                        <p class="message-line">Номер: {{incident_info.number}}</p>
+                        <p class="message-line">Очередь: {{incident_info.workgroup}} </p>
+                        <p class="message-line">Исполнитель: {{incident_info.responsible}} </p>
+                        <p class="message-line">Решение: {{incident_info.solution}} </p>
 
 
 
@@ -179,22 +160,18 @@
 
                         </div>
                         <p class="message-line">
-                            Создана:
-                            26.03.2025 17:37
+                            Создана: {{incident_info.registrationStartDate}}
                         </p>
                         <p class="message-line">
-                            Возраст:
-                            4 дн 22 ч
-                        </p>
-                        <p class="message-line">Приоритет: 1 нормальный</p>
-                        <p class="message-line">
-                            Состояние:
-                            Зарегистрирована
+                            Крайний срок: {{incident_info.deadline}}
                         </p>
                         <p class="message-line">
-                            Очередь:
-                            1С
+                            Последнее обновление: {{incident_info.lastModifiedDate}}
                         </p>
+                        <p class="message-line">
+                            Дата закрытия: {{incident_info.actualClosingDate}}
+                        </p>
+
 
 
 

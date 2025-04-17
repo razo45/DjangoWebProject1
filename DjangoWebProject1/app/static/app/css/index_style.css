@@ -5,6 +5,7 @@
     box-sizing: border-box;
 }
 
+
 :root {
     --app-container: #f3f6fd;
     --main-color: #1f1c2e;
@@ -316,6 +317,11 @@ button, a {
     flex-direction: column;
     margin-right: 16px;
 }
+    .item-status.active {
+        border-bottom-color: var(--main-color);
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+    }
 
     .item-status:not(:last-child) .status-type:after {
         content: "";

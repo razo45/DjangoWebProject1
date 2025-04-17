@@ -1,0 +1,28 @@
+{% for incident in incidents  %}
+<div class="project-box-wrapper">
+    <div class="project-box" style="background-color: #fee4cb;">
+        <div class="project-box-header">
+            <span>{{incident.date}}</span>
+            <div class="more-wrapper">
+                <button class="project-btn-more">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="project-box-content-header">
+            <a href="{% url 'Open_Ticket' ticket_uuid=incident.linkUuid %}" class="box-content-header">{{incident.number}}</a>
+            <p class="box-content-subheader">{{incident.state}}</p>
+        </div>
+        <div class="box-progress-wrapper">
+            <p class="box-progress-header">{{incident.topic}}</p>
+            <div class="box-progress-bar">
+                <span class="box-progress" style="width: 100%; background-color: #ff942e"></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
