@@ -76,6 +76,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="app\static\app\Image\NoAvatar.jpg" />
+    <Content Include="app\static\app\js\header_script.js" />
     <Content Include="app\static\app\js\index_script.js" />
     <Content Include="app\static\app\js\woops_script.js">
       <SubType>Code</SubType>
@@ -85,6 +86,7 @@
     <Content Include="app\templates\app\partials\incidents_list.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="app\static\favicon.ico" />
     <Content Include="app\templates\app\Whoops.html">
       <SubType>Code</SubType>
     </Content>

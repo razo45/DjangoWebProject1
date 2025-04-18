@@ -1,10 +1,11 @@
 ﻿<!doctype html>
 {% load static %}
+<title>Заявка {{incident_info.number}}</title>
+
 
 
 <link rel="stylesheet" href="{% static 'app/css/index_style.css' %}">
 <div class="app-container">
-
     {% include "app/header.html" %}
     <div class="app-content">
 
@@ -106,19 +107,29 @@
                         <p class="message-line">
                             Дата закрытия: {{incident_info.actualClosingDate}}
                         </p>
-
-
-
-
-
-
-
-
-
-
                     </div>
                 </div>
+                <div class="message-box">
 
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="name">Вложеные файлы</div>
+
+                        </div>
+                        <a href="#" class="message-line">
+                            Создана: {{incident_info.registrationStartDate}}
+                        </a>
+                        <p class="message-line">
+                            Крайний срок: {{incident_info.deadline}}
+                        </p>
+                        <p class="message-line">
+                            Последнее обновление: {{incident_info.lastModifiedDate}}
+                        </p>
+                        <p class="message-line">
+                            Дата закрытия: {{incident_info.actualClosingDate}}
+                        </p>
+                    </div>
+                </div>
 
 
                 <div></div>
@@ -129,4 +140,3 @@
 <!-- Подключение JavaScript -->
 <script src="{% static 'app/js/index_script.js' %}"></script>
 
-        
