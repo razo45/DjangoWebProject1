@@ -57,7 +57,7 @@
 .buttonnew::before {
     position: absolute;
     bottom: -20px;
-    content: "Создать заявку";
+    content: "РЎРѕР·РґР°С‚СЊ Р·Р°СЏРІРєСѓ";
     color: white;
     /* transition-duration: .3s; */
     font-size: 0px;

@@ -22,6 +22,8 @@ import pyodbc
 import html
 import re
 from bs4 import BeautifulSoup
+import base64
+from django.http import HttpResponse
 # === Блок динамического обновления страниц === ↓
 
 @login_required
@@ -59,7 +61,7 @@ def clean_html(text):
 
 
 
-# === Блок Взаимодействия с API и обработка данныз === ↓
+# === Блок Взаимодействия с API и обработка данных === ↓
 
 def get_incidents_list(initiator_uuid):  # <-- Переименовали параметр
     url = "http://m9-intalev-1c/ITIL/hs/externalapi/getIncidentsList"
@@ -149,6 +151,34 @@ def extGetDetailIncidentInfo(request): # Получение информации
         return array
     else:
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
+        return {"error": f"Ошибка {response.status_code}", "details": response.text}
+
+def extGetFileData(request): # Получение файло по uuid 
+    url = "http://m9-intalev-1c/ITIL/hs/externalapi/extGetFileData"
+    
+    # JSON-данные, которые ожидает API
+    payload = {
+        "idFile": request
+        }
+
+    # Учетные данные (замени на свои)
+    username = "r.nersesyan"
+    password = "1234"
+
+    response = requests.post(
+        url,
+        json=payload,
+        auth=HTTPBasicAuth(username, password),
+        headers={"Content-Type": "application/json"}
+    )
+
+    if response.status_code == 200:
+        f = json.loads(response.text)
+        array = f
+        return array
+    else:
+        return {"error": f"Ошибка {response.status_code}", "details": response.text}
+        return {"error": f"Ошибка {response.status_code}", "details": response.text}
 
 # === Блок открытия страниц === ↓
 
@@ -222,12 +252,21 @@ def Whoops(request):
 
     return render(request, 'app/Whoops.html')  # Если `GET`, просто показываем форму
 
+@login_required
+def Download_File(request, file_uuid):
+    file = extGetFileData(file_uuid)
+    file_data = base64.b64decode(file['Data'])
+    response = HttpResponse(file_data, content_type='application/octet-stream')
+    name = file['Name']
+    response['Content-Disposition'] = f'attachment; filename="{name}"'
+    return response
 
 
 
 @login_required
 def Open_Ticket(request, ticket_uuid):
     all_incidents = extGetDetailIncidentInfo(ticket_uuid)
+    all_files = all_incidents.get("FilesDefinitions",[])
     # Раскодируем HTML в каждом сообщении
     for msg in all_incidents.get("TheHistoryOfCommunication", []):
         msg["html_render"] = clean_html(msg.get("HTMLText", ""))
@@ -238,6 +277,7 @@ def Open_Ticket(request, ticket_uuid):
             'message': '',
             "user": request.user,
             'incident_info': all_incidents,
+            'all_files': all_files,
 
         }
 ) # Страница подробной информации о тикете

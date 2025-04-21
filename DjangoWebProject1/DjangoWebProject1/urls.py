@@ -17,6 +17,7 @@ urlpatterns = [
     path('Whoops/',views.Whoops, name='Whoops'),
     path("logout/", views.logout_view, name="logout"),
     path("Open_Ticket/<str:ticket_uuid>", views.Open_Ticket, name="Open_Ticket"),
+    path("Download_File/<str:file_uuid>", views.Download_File, name="Download_File"),
     path("filter-incidents/", views.filter_incidents, name="filter_incidents"),
     path("Search_Ticket/", views.Open_Ticket_Search, name="Open_Ticket_Search"),
 

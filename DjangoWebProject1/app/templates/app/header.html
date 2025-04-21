@@ -17,9 +17,23 @@
 
     </div>
     <div class="app-header-right">
+        {%if request.user.is_seach%}
+        <form method="get" action="{% url 'Open_Ticket_Search' %}" class="form">
+            <button type="submit">
+                <svg width="17" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="search">
+                    <path d="M7.667 12.667A5.333 5.333 0 107.667 2a5.333 5.333 0 000 10.667zM14.334 14l-2.9-2.9" stroke="currentColor" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </button>
+            <input class="input" name="uuid" placeholder="№ Заявки" required type="text">
+            <button class="reset" type="reset">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </form>
+        {% endif %}
 
-
-        <button class="buttonnew">
+        <button class="buttonnew" style="margin-left: 18px;margin-right: 18px;">
 
 
             <svg class="svgIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="">
@@ -29,12 +43,14 @@
         </button>
 
 
-        <button class="mode-switch" title="Switch Theme">
+        <button class="mode-switch" title="Switch Theme" style="margin-left: 0px;">
             <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
                 <defs></defs>
                 <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
             </svg>
-        </button><div class="list-container active" style="z-index: 9999;">
+        </button>
+
+        <div class="list-container" style="z-index: 9999;">
             <button class="more-button" aria-label="Menu Button">
                 <div class="menu-icon-wrapper">
                     <div class="menu-icon-line half first"></div>

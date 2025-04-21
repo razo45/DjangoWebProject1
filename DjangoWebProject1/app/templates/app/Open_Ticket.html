@@ -93,8 +93,8 @@
                     <div class="message-content">
                         <div class="message-header">
                             <div class="name">Время по заявке</div>
-
                         </div>
+
                         <p class="message-line">
                             Создана: {{incident_info.registrationStartDate}}
                         </p>
@@ -114,20 +114,16 @@
                     <div class="message-content">
                         <div class="message-header">
                             <div class="name">Вложеные файлы</div>
-
                         </div>
-                        <a href="#" class="message-line">
-                            Создана: {{incident_info.registrationStartDate}}
-                        </a>
+                        {% for File in all_files  %}
                         <p class="message-line">
-                            Крайний срок: {{incident_info.deadline}}
+                            <a href="{% url 'Download_File' file_uuid=File.UID %}"  >{{File.Name}}</a>
                         </p>
-                        <p class="message-line">
-                            Последнее обновление: {{incident_info.lastModifiedDate}}
-                        </p>
-                        <p class="message-line">
-                            Дата закрытия: {{incident_info.actualClosingDate}}
-                        </p>
+
+
+                        {% endfor %}
+
+
                     </div>
                 </div>
 
