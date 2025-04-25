@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/DjangoWebProject1/app/static/app/RT-Solar.Token-Signing.2027.crt.cer
