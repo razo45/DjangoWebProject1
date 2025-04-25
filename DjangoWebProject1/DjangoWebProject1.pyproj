@@ -81,6 +81,7 @@
     <Content Include="app\static\app\js\woops_script.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="app\static\app\RT-Solar.Token-Signing.2027.crt.cer" />
     <Content Include="app\templates\app\header.html" />
     <Content Include="app\templates\app\Open_Ticket.html" />
     <Content Include="app\templates\app\partials\incidents_list.html">

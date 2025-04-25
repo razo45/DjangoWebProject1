@@ -33,7 +33,7 @@
         </form>
         {% endif %}
 
-        <button class="buttonnew" style="margin-left: 18px;margin-right: 18px;">
+        <button id="openModalBtn" class="buttonnew" style="margin-left: 18px;margin-right: 18px;">
 
 
             <svg class="svgIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="">
@@ -42,6 +42,13 @@
 
         </button>
 
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <button class="modal-close" id="closeModalBtn">×</button>
+                <h2>Привет!</h2>
+                <p>Это модальное окно с плавной анимацией.</p>
+            </div>
+        </div>
 
         <button class="mode-switch" title="Switch Theme" style="margin-left: 0px;">
             <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
@@ -50,7 +57,7 @@
             </svg>
         </button>
 
-        <div class="list-container" style="z-index: 9999;">
+        <div class="list-container" style="z-index: 2;">
             <button class="more-button" aria-label="Menu Button">
                 <div class="menu-icon-wrapper">
                     <div class="menu-icon-line half first"></div>

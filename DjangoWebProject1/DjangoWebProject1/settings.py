@@ -130,11 +130,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTH_ADFS = {
-    "SERVER": "adfs.yourcompany.com",
+    "SERVER": "adfs.rt-solar.ru",
     "CLIENT_ID": "your-client-id",
     "RELYING_PARTY_ID": "your-relying-party-id",
     "AUDIENCE": "microsoft:identityserver:your-relying-party-id",
-    "CA_BUNDLE": "/path/to/ca-bundle.pem",
+    "CA_BUNDLE": "C:\\Users\\r.nersesyan\\source\repos\\DjangoWebProject1\\DjangoWebProject1\\app\\static\\app\\RT-Solar.Token-Signing.2027.crt.cer",
     "CLAIM_MAPPING": {
         "first_name": "given_name",
         "last_name": "family_name",
