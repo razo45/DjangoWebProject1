@@ -24,6 +24,11 @@ import re
 from bs4 import BeautifulSoup
 import base64
 from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
+import requests
+from django.http import JsonResponse
 # === Блок динамического обновления страниц === ↓
 
 @login_required
@@ -96,6 +101,21 @@ def get_initiator_uuid(data): # Получение UUID пользователя
         if "Initiators" in parsed_data and parsed_data["Initiators"]:
             # Извлекаем InitiatorUuid первого элемента
             initiator_uuid = parsed_data["Initiators"][0].get("InitiatorUuid")
+            return initiator_uuid
+        else:
+            return None  # Если в "Initiators" нет данных
+    except json.JSONDecodeError:
+        return None 
+
+def get_Client_uuid(data): # Получение UUID пользователя из getInitiators1 
+    try:
+        # Преобразуем строку JSON в словарь
+        parsed_data = json.loads(data)
+        
+        # Проверяем, что ключ "Initiators" существует и не пуст
+        if "Initiators" in parsed_data and parsed_data["Initiators"]:
+            # Извлекаем InitiatorUuid первого элемента
+            initiator_uuid = parsed_data["Initiators"][0].get("InitiatorOwner")
             return initiator_uuid
         else:
             return None  # Если в "Initiators" нет данных
@@ -179,6 +199,129 @@ def extGetFileData(request): # Получение файло по uuid
     else:
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
+
+def get_services(request):
+    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getServices"
+    payload = {}
+        # Учетные данные (замени на свои)
+    username = "r.nersesyan"
+    password = "1234"
+
+    response = requests.post(
+        url,
+        json=payload,
+        auth=HTTPBasicAuth(username, password),
+        headers={"Content-Type": "application/json"}
+    )
+
+    if response.status_code == 200:
+        raw = response.json()
+        components = [
+            {
+                "uuid": item["ServiceUuid"],
+                "name": item["Service"]
+            }
+            for item in raw.get("Services", [])
+        ]
+        return JsonResponse({"services": components})
+    return JsonResponse({"services": []})
+
+def get_components(request):
+    uuid = request.GET.get('uuid')
+    if not uuid:
+        return JsonResponse({'components': []})
+
+    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getServiceComponents"
+    payload = {
+        "servCompServiceUuid": uuid
+        }
+        # Учетные данные (замени на свои)
+    username = "r.nersesyan"
+    password = "1234"
+
+    response = requests.post(
+        url,
+        json=payload,
+        auth=HTTPBasicAuth(username, password),
+        headers={"Content-Type": "application/json"}
+    )
+
+    if response.status_code == 200:
+        raw = response.json()
+        components = [
+            {
+                "uuid": item["ServiceComponentUuid"],
+                "name": item["ServiceComponent"]
+            }
+            for item in raw.get("ServiceComponents", [])
+        ]
+        return JsonResponse({"components": components})
+    return JsonResponse({"components": []})
+
+
+@require_http_methods(["GET", "POST"])
+
+def create_ticket(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        service = request.POST.get("service")
+        component = request.POST.get("component")
+        typeuuid = request.POST.get("type")
+        comment = request.POST.get("comment")
+        files = request.FILES.getlist("attachments")  # <--- Получаем список файлов
+
+
+        files_payload = []
+
+        for f in files:
+            # Чтение и кодирование в base64
+            file_data = f.read()
+            encoded_data = base64.b64encode(file_data).decode("utf-8")
+
+            files_payload.append({
+                "Name": f.name,
+                "Data": encoded_data
+            })
+
+        url = "http://m9-intalev-1c/ITIL/hs/externalapi/performCustomActionWithIncident"
+    
+        payload = {
+            "Action" : "RegisterIncident",
+            "ClientUuid" : request.user.Client_uuid,
+            "InitiatorUuid" : request.user.initiator_uuid,
+            "ServiceUuid" : service,
+            "CompositionServiceUuid" : component,
+            "TypeUuid" : typeuuid,
+            "Topic" : title,
+            "Description" : comment,
+            "Files" : files_payload
+
+        }
+
+
+        username = "r.nersesyan"
+        password = "1234"
+
+        response = requests.post(
+            url,
+            json=payload,
+            auth=HTTPBasicAuth(username, password),
+            headers={"Content-Type": "application/json"}
+        )
+
+        if response.status_code == 200:
+            return redirect("home")  # или куда нужно
+        else:
+            return redirect("home")
+
+
+
+
+            
+
+
+
+
 
 # === Блок открытия страниц === ↓
 
@@ -301,9 +444,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)  # Проверяем пользователя
 
         if user is not None:  # Если логин/пароль верные
-
-            uuid = get_initiator_uuid(getInitiators1(username))
-            user.initiator_uuid = uuid
+            data = getInitiators1(username)
+            user.initiator_uuid = get_initiator_uuid(data)
+            user.Client_uuid = get_Client_uuid(data)
             user.save()
 
             login(request, user)

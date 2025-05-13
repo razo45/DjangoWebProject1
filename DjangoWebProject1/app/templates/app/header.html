@@ -1,4 +1,5 @@
 {% load static %}
+<link rel="icon" type="image/x-icon" href="{% static 'app/favicon.ico' %}">
 <link rel="stylesheet" href="{% static 'app/css/header_style.css' %}">
 <title>Заявки</title>
 <div class="app-header">
@@ -43,10 +44,86 @@
         </button>
 
         <div class="modal-overlay" id="modalOverlay">
-            <div class="modal">
+            <div class="modal" style="padding-left: 5px;padding-right: 5px;padding-bottom: 5px;padding-top: 5px;">
+
                 <button class="modal-close" id="closeModalBtn">×</button>
-                <h2>Привет!</h2>
-                <p>Это модальное окно с плавной анимацией.</p>
+                <div class="card">
+                    <span class="title">Создать заявку</span>
+                    <form class="formT" method="post" enctype="multipart/form-data" action="{% url 'create_ticket' %}">
+                        {% csrf_token %}
+                        <div class="group" style="height: 59px;">
+                            <label class="select" for="slct" style="top: 0px;left: 0px;bottom: 0px;right: 0px;">
+                                <select id="service" name="service" required="required">
+                                    <option value="" disabled="disabled" selected="selected">Выберите услугу</option>
+
+
+                                </select>
+                                <svg style="top: 15px;">
+                                    <use xlink:href="#select-arrow-down"></use>
+                                </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                                <symbol id="select-arrow-down" viewBox="0 0 10 6">
+                                    <polyline points="1 1 5 5 9 1"></polyline>
+                                </symbol>
+                            </svg>
+                        </div>
+
+                        <div class="group" style="height: 59px;">
+                            <label class="select" for="slct" style="top: 0px;left: 0px;bottom: 0px;right: 0px;">
+                                <select id="component" name="component" disabled required="required">
+                                    <option value="">-- Сначала выберите услугу --</option>
+                                </select>
+                                <svg style="top: 15px;">
+                                    <use xlink:href="#select-arrow-down"></use>
+                                </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                                <symbol id="select-arrow-down" viewBox="0 0 10 6">
+                                    <polyline points="1 1 5 5 9 1"></polyline>
+                                </symbol>
+                            </svg>
+                        </div>
+                        <div class="group" style="height: 59px;">
+                            <label class="select" for="slct" style="top: 0px;left: 0px;bottom: 0px;right: 0px;">
+                                <select id="type" name="type" required="required">
+                                    <option value="" disabled="disabled" selected="selected">Выберите тип</option>
+                                    <option value="71b684f5-1dd2-4b85-a257-b64c13f14c85">Запрос на изменение</option>
+                                    <option value="5644cc6e-e46c-4a0e-87b1-33572715ba4b">Запрос на обслуживание</option>
+                                    <option value="8d37d179-25e7-42bc-bdb5-23e7950bcf99">Инцидент</option>
+                                </select>
+                                <svg style="top: 15px;">
+                                    <use xlink:href="#select-arrow-down"></use>
+                                </svg>
+                            </label>
+                            <!-- SVG Sprites-->
+                            <svg class="sprites">
+                                <symbol id="select-arrow-down" viewBox="0 0 10 6">
+                                    <polyline points="1 1 5 5 9 1"></polyline>
+                                </symbol>
+                            </svg>
+                        </div>
+                        <div class="group">
+                            <input placeholder="‎" type="text" name="title" id="title" required>
+                            <label for="title">Тема</label>
+                        </div>
+
+                        <div class="group">
+                            <textarea placeholder="‎" id="comment" name="comment" rows="5" required></textarea>
+                            <label for="comment">Описание</label>
+                        </div>
+
+                        <label for="file-input" class="drop-container" style="margin-top: 0px;margin-bottom: 20px;">
+                            <span class="drop-title">Поместите файлы сюда</span>или
+                            <input type="file" name="attachments" accept="image/*" multiple required id="file-input">
+                        </label>
+
+                        <button type="submit" style="margin-left: 0px;">Создать</button>
+                    </form>
+                </div>
+
             </div>
         </div>
 

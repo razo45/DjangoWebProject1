@@ -87,7 +87,7 @@
     <Content Include="app\templates\app\partials\incidents_list.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="app\static\favicon.ico" />
+    <Content Include="app\static\app\favicon.ico" />
     <Content Include="app\templates\app\Whoops.html">
       <SubType>Code</SubType>
     </Content>
