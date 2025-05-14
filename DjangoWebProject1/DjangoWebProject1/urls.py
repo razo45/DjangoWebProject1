@@ -23,9 +23,10 @@ urlpatterns = [
     path("filter-incidents/", views.filter_incidents, name="filter_incidents"),
     path("Search_Ticket/", views.Open_Ticket_Search, name="Open_Ticket_Search"),
     path("create-ticket/", views.create_ticket, name="create_ticket"),
+    path("send_mess/", views.send_mess, name="send_mess"),
     path('get_components/', views.get_components, name='get_components'),
     path('api/services/', views.get_services, name='get_services'),
 
     # ADFS
     path('oauth2/', include('django_auth_adfs.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

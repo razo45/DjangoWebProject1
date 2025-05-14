@@ -314,6 +314,51 @@ def create_ticket(request):
         else:
             return redirect("home")
 
+def send_mess(request):
+    if request.method == "POST":
+        Mess = request.POST.get("Message")
+        uuid = request.POST.get("uuid")
+        files = request.FILES.getlist("file")  # <--- Получаем список файлов
+
+
+        files_payload = []
+
+        for f in files:
+            # Чтение и кодирование в base64
+            file_data = f.read()
+            encoded_data = base64.b64encode(file_data).decode("utf-8")
+
+            files_payload.append({
+                "Name": f.name,
+                "Data": encoded_data
+            })
+
+        url = "http://m9-intalev-1c/ITIL/hs/externalapi/performCustomActionWithIncident"
+    
+        payload = {
+            "Action" : "AddNewCommunicationWithFile",
+            "IncUuid" : uuid,
+            "Commentary" : Mess,
+            "Files" : files_payload
+
+        }
+
+
+        username = "r.nersesyan"
+        password = "1234"
+
+        response = requests.post(
+            url,
+            json=payload,
+            auth=HTTPBasicAuth(username, password),
+            headers={"Content-Type": "application/json"}
+        )
+
+        if response.status_code == 200:
+            return redirect("Open_Ticket", ticket_uuid=uuid)  
+        else:
+            return redirect("Open_Ticket", ticket_uuid=uuid)
+
 
 
 
