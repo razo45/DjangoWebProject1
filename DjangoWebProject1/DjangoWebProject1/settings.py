@@ -18,8 +18,10 @@ from django_auth_ldap.config import LDAPSearch
 
 
 AUTH_LDAP_SERVER_URI = "ldap://10.201.42.10"  # ← замените на адрес вашего AD-сервера
+ALLOWED_HOSTS = ['*']
 
-
+AUTH_LDAP_BIND_DN = "r.nersesyan"  
+AUTH_LDAP_BIND_PASSWORD = "Razo159753852@"
 
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
     "OU=SolarSecurity,OU=Domain Users,DC=solar,DC=local",  # ← замените на ваш путь в AD

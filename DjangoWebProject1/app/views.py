@@ -33,11 +33,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import GlobalSettings
 
-# === Блок динамического обновления страниц === ↓
+
 settings = GlobalSettings.get_solo()
-# settings.URL_ITILIUM = "http://m9-intalev-1c/ITIL/hs/externalapi/"
-# settings.usernameAPI = "r.nersesyan"
-# settings.passwordAPI = "1234"
+
 
 @login_required
 def filter_incidents(request): # Динамическое обновение списка обращений пользователя
@@ -425,6 +423,7 @@ def send_mess(request):
 @login_required
 def home(request):
     """Renders the home page."""
+
     assert isinstance(request, HttpRequest)
     initiator_uuid = request.user.initiator_uuid
     default_avatar = static('app/image/NoAvatar.jpg')
