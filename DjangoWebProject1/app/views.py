@@ -3,6 +3,7 @@ Definition of views.
 """
 # -*- coding: utf-8 -*-
 
+import code
 from datetime import datetime
 from email import message
 from django.shortcuts import render
@@ -29,7 +30,14 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 import requests
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import GlobalSettings
+
 # === Блок динамического обновления страниц === ↓
+settings = GlobalSettings.get_solo()
+# settings.URL_ITILIUM = "http://m9-intalev-1c/ITIL/hs/externalapi/"
+# settings.usernameAPI = "r.nersesyan"
+# settings.passwordAPI = "1234"
 
 @login_required
 def filter_incidents(request): # Динамическое обновение списка обращений пользователя
@@ -39,12 +47,11 @@ def filter_incidents(request): # Динамическое обновение с�
     if state == "Всего":
         filtered = all_incidents
     elif state == "Открыто":
-        filtered = [i for i in all_incidents if i.get("state") != 'Закрыто']
+        filtered = [i for i in all_incidents if i.get("state") != 'Закрыто' and i.get("state") != 'Отклонено']
     else:
-        filtered = [i for i in all_incidents if i.get("state") == 'Закрыто']
+        filtered = [i for i in all_incidents if i.get("state") == 'Закрыто' or i.get("state") == 'Отклонено']
 
     return render(request, "app/partials/incidents_list.html", {"incidents": filtered})
-
 
 def clean_html(text):
     decoded = html.unescape(text)
@@ -63,26 +70,23 @@ def clean_html(text):
 
     return str(soup)
 
-
-
-
 # === Блок Взаимодействия с API и обработка данных === ↓
 
 def get_incidents_list(initiator_uuid):  # <-- Переименовали параметр
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getIncidentsList"
+    url = settings.URL_ITILIUM + "getIncidentsList"
     
     payload = {
         "startFrom": "0",        
         "initiatorUuid": initiator_uuid  # <-- используем новый параметр
     }
 
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -107,6 +111,21 @@ def get_initiator_uuid(data): # Получение UUID пользователя
     except json.JSONDecodeError:
         return None 
 
+def get_initiator_code(data): # Получение UUID пользователя из getInitiators1 
+    try:
+        # Преобразуем строку JSON в словарь
+        parsed_data = json.loads(data)
+        
+        # Проверяем, что ключ "Initiators" существует и не пуст
+        if "Initiators" in parsed_data and parsed_data["Initiators"]:
+            # Извлекаем InitiatorUuid первого элемента
+            initiator_uuid = parsed_data["Initiators"][0].get("InitiatorCode")
+            return initiator_uuid
+        else:
+            return None  # Если в "Initiators" нет данных
+    except json.JSONDecodeError:
+        return None 
+
 def get_Client_uuid(data): # Получение UUID пользователя из getInitiators1 
     try:
         # Преобразуем строку JSON в словарь
@@ -123,7 +142,7 @@ def get_Client_uuid(data): # Получение UUID пользователя и
         return None 
 
 def getInitiators1(request): # Получение информации о пользователе через его логин 
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getInitiators1"
+    url = settings.URL_ITILIUM + "getInitiators1"
     
     # JSON-данные, которые ожидает API
     payload = {
@@ -131,13 +150,13 @@ def getInitiators1(request): # Получение информации о пол
         }
 
     # Учетные данные (замени на свои)
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -147,7 +166,7 @@ def getInitiators1(request): # Получение информации о пол
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
 
 def extGetDetailIncidentInfo(request): # Получение информации о пользователе через его логин 
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/extGetDetailIncidentInfo"
+    url = settings.URL_ITILIUM + "extGetDetailIncidentInfo"
     
     # JSON-данные, которые ожидает API
     payload = {
@@ -155,13 +174,13 @@ def extGetDetailIncidentInfo(request): # Получение информации
         }
 
     # Учетные данные (замени на свои)
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -174,7 +193,7 @@ def extGetDetailIncidentInfo(request): # Получение информации
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
 
 def extGetFileData(request): # Получение файло по uuid 
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/extGetFileData"
+    url = settings.URL_ITILIUM + "extGetFileData"
     
     # JSON-данные, которые ожидает API
     payload = {
@@ -182,13 +201,13 @@ def extGetFileData(request): # Получение файло по uuid
         }
 
     # Учетные данные (замени на свои)
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -201,16 +220,16 @@ def extGetFileData(request): # Получение файло по uuid
         return {"error": f"Ошибка {response.status_code}", "details": response.text}
 
 def get_services(request):
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getServices"
+    url = settings.URL_ITILIUM + "getServices"
     payload = {}
         # Учетные данные (замени на свои)
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -231,18 +250,18 @@ def get_components(request):
     if not uuid:
         return JsonResponse({'components': []})
 
-    url = "http://m9-intalev-1c/ITIL/hs/externalapi/getServiceComponents"
+    url = settings.URL_ITILIUM + "getServiceComponents"
     payload = {
         "servCompServiceUuid": uuid
         }
         # Учетные данные (замени на свои)
-    username = "r.nersesyan"
-    password = "1234"
+
+
 
     response = requests.post(
         url,
         json=payload,
-        auth=HTTPBasicAuth(username, password),
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
         headers={"Content-Type": "application/json"}
     )
 
@@ -258,9 +277,42 @@ def get_components(request):
         return JsonResponse({"components": components})
     return JsonResponse({"components": []})
 
+def get_KE(request):
+    code = request.user.initiator_code
+    if not code:
+        return JsonResponse({'components': []})
+
+    url = settings.URL_ITILIUM + "getInitiatorsKE"
+    payload = {
+        "initClientCode": code
+        }
+        # Учетные данные (замени на свои)
+
+
+
+    response = requests.post(
+        url,
+        json=payload,
+        auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
+        headers={"Content-Type": "application/json"}
+    )
+
+    if response.status_code == 200:
+        raw = response.json()
+        components = [
+            {
+                "NAME": item["InitiatorKE"],
+                "INV": item["InitiatorKeInvN"],
+                "LOC": item["InitiatorKeLocation"],
+                "CLASS": item["InitiatorKeClassification"]
+            }
+            for item in raw.get("Initiators", [])
+        ]
+        return JsonResponse({"components": components})
+    return JsonResponse({"components": []})
+
 
 @require_http_methods(["GET", "POST"])
-
 def create_ticket(request):
     if request.method == "POST":
         title = request.POST.get("title")
@@ -283,7 +335,7 @@ def create_ticket(request):
                 "Data": encoded_data
             })
 
-        url = "http://m9-intalev-1c/ITIL/hs/externalapi/performCustomActionWithIncident"
+        url = settings.URL_ITILIUM + "performCustomActionWithIncident"
     
         payload = {
             "Action" : "RegisterIncident",
@@ -299,13 +351,13 @@ def create_ticket(request):
         }
 
 
-        username = "r.nersesyan"
-        password = "1234"
+    
+    
 
         response = requests.post(
             url,
             json=payload,
-            auth=HTTPBasicAuth(username, password),
+            auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
             headers={"Content-Type": "application/json"}
         )
 
@@ -333,7 +385,7 @@ def send_mess(request):
                 "Data": encoded_data
             })
 
-        url = "http://m9-intalev-1c/ITIL/hs/externalapi/performCustomActionWithIncident"
+        url = settings.URL_ITILIUM + "performCustomActionWithIncident"
     
         payload = {
             "Action" : "AddNewCommunicationWithFile",
@@ -344,13 +396,13 @@ def send_mess(request):
         }
 
 
-        username = "r.nersesyan"
-        password = "1234"
+    
+    
 
         response = requests.post(
             url,
             json=payload,
-            auth=HTTPBasicAuth(username, password),
+            auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
             headers={"Content-Type": "application/json"}
         )
 
@@ -377,10 +429,9 @@ def home(request):
     initiator_uuid = request.user.initiator_uuid
     default_avatar = static('app/image/NoAvatar.jpg')
     incidents =list(get_incidents_list(initiator_uuid))
-    count_closed = sum(1 for incident in incidents if incident.get("state") == 'Закрыто')
-    count_open = sum(1 for incident in incidents if incident.get("state") != 'Закрыто')
+    count_closed = sum(1 for incident in incidents if incident.get("state") == 'Закрыто' or incident.get("state") == 'Отклонено')
+    count_open = sum(1 for incident in incidents if incident.get("state") != 'Закрыто' and incident.get("state") != 'Отклонено')
     count_all = len(incidents)
-
 
     return render(
         request,
@@ -395,7 +446,7 @@ def home(request):
             'count_open': count_open,
             'count_all': count_all,
         }
-        
+       
 
     ) # Страница всех тикетов пользователя
 
@@ -406,20 +457,20 @@ def Open_Ticket_Search(request):
         if num:
 
 
-            url = "http://m9-intalev-1c/ITIL/hs/externalapi/getIncidentsList"
+            url = settings.URL_ITILIUM + "getIncidentsList"
     
             payload = {
                 "startFrom": "0",        
                 "number": num  # <-- используем новый параметр
             }
 
-            username = "r.nersesyan"
-            password = "1234"
+        
+        
 
             response = requests.post(
                 url,
                 json=payload,
-                auth=HTTPBasicAuth(username, password),
+                auth=HTTPBasicAuth(settings.usernameAPI, settings.passwordAPI),
                 headers={"Content-Type": "application/json"}
             )
 
@@ -449,8 +500,6 @@ def Download_File(request, file_uuid):
     response['Content-Disposition'] = f'attachment; filename="{name}"'
     return response
 
-
-
 @login_required
 def Open_Ticket(request, ticket_uuid):
     all_incidents = extGetDetailIncidentInfo(ticket_uuid)
@@ -469,8 +518,6 @@ def Open_Ticket(request, ticket_uuid):
 
         }
 ) # Страница подробной информации о тикете
-
-
 
 @login_required
 def logout_view(request):
@@ -492,6 +539,7 @@ def login_view(request):
             data = getInitiators1(username)
             user.initiator_uuid = get_initiator_uuid(data)
             user.Client_uuid = get_Client_uuid(data)
+            user.initiator_code = get_initiator_code(data)
             user.save()
 
             login(request, user)
@@ -501,3 +549,14 @@ def login_view(request):
             return render(request, 'app/login.html', {"error": "Неверный логин или пароль"})  # Ошибка
 
     return render(request, 'app/login.html')  # Если `GET`, просто показываем форму
+
+@csrf_exempt  # если используешь @login_required, не забудь добавить @csrf_exempt после него
+def set_theme(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        data = json.loads(request.body)
+        theme = data.get('theme')
+        if theme in ['dark', 'light']:
+            request.user.preferredTheme = theme
+            request.user.save()
+            return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'}, status=400)

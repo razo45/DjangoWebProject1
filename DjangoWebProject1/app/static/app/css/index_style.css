@@ -1,6 +1,134 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
 
+.radio {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: row-reverse;
+}
+
+    .radio > input {
+        position: absolute;
+        appearance: none;
+    }
+
+    .radio > label {
+        cursor: pointer;
+        font-size: 30px;
+        position: relative;
+        display: inline-block;
+        transition: transform 0.3s ease;
+    }
+
+        .radio > label > svg {
+            fill: #666;
+            transition: fill 0.3s ease;
+        }
+
+        .radio > label::before,
+        .radio > label::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #ff9e0b;
+            border-radius: 50%;
+            opacity: 0;
+            transform: scale(0);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            animation: particle-explosion 1s ease-out;
+        }
+
+        .radio > label::before {
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+        }
+
+        .radio > label::after {
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+        }
+
+        .radio > label:hover::before,
+        .radio > label:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) scale(1.5);
+        }
+
+        .radio > label:hover {
+            transform: scale(1.2);
+            animation: pulse 0.6s infinite alternate;
+        }
+
+            .radio > label:hover > svg,
+            .radio > label:hover ~ label > svg {
+                fill: #ff9e0b;
+                filter: drop-shadow(0 0 15px rgba(255, 158, 11, 0.9));
+                animation: shimmer 1s ease infinite alternate;
+            }
+
+    .radio > input:checked + label > svg,
+    .radio > input:checked + label ~ label > svg {
+        fill: #ff9e0b;
+        filter: drop-shadow(0 0 15px rgba(255, 158, 11, 0.9));
+        animation: pulse 0.8s infinite alternate;
+    }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes particle-explosion {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        filter: drop-shadow(0 0 10px rgba(255, 158, 11, 0.5));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 20px rgba(255, 158, 11, 1));
+    }
+}
+
+.radio > input:checked + label:hover > svg,
+.radio > input:checked + label:hover ~ label > svg {
+    fill: #e58e09;
+}
+
+.radio > label:hover > svg,
+.radio > label:hover ~ label > svg {
+    fill: #ff9e0b;
+}
+
+.radio input:checked ~ label svg {
+    fill: #ffa723;
+}
+
+
 * {
     box-sizing: border-box;
 }
@@ -152,6 +280,7 @@
     --search-area-bg: #fff;
     --star: #1ff1c2e;
     --message-btn: #fff;
+    --url-color: #3216B7;
 }
 
 .dark:root {
@@ -173,6 +302,7 @@
     --more-list-bg-hover: rgba(195, 207, 244, 0.1);
     --more-list-shadow: rgba(195, 207, 244, 0.1);
     --message-btn: rgba(195, 207, 244, 0.1);
+    --url-color: antiquewhite;
 }
 
 html, body {
@@ -691,6 +821,7 @@ button, a {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        max-width: 89px;
     }
 
     .project-boxes.jsListView .project-box-header > span {
@@ -775,6 +906,7 @@ button, a {
     line-height: 24px;
     font-weight: 700;
     opacity: 0.7;
+    text-align: left;
 }
 
 .box-content-subheader {

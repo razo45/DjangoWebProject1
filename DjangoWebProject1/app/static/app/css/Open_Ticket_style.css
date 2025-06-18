@@ -23,6 +23,7 @@
     --search-area-bg: #fff;
     --star: #1ff1c2e;
     --message-btn: #fff;
+    --url-color: #4A4A4A;
 }
 
 .dark:root {
@@ -44,6 +45,7 @@
     --more-list-bg-hover: rgba(195, 207, 244, 0.1);
     --more-list-shadow: rgba(195, 207, 244, 0.1);
     --message-btn: rgba(195, 207, 244, 0.1);
+    --url-color: antiquewhite;
 }
 
 html, body {
@@ -232,7 +234,7 @@ button, a {
         font-weight: 700;
     }
 
-.page-content  {
+.page-contentï¿½ {
     flex: 1;
     width: 100%;
 }

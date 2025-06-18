@@ -1,0 +1,160 @@
+﻿<!doctype html>
+{% load static %}
+<title>Заявка {{incident_info.number}}</title>
+
+
+
+<link rel="stylesheet" href="{% static 'app/css/index_style.css' %}">
+<div class="app-container">
+    {% include "app/header.html" with theme=user.preferredTheme %}
+    <div class="app-content">
+
+        <div class="projects-section">
+            <div class="projects-section-header">
+                <p>{{incident_info.topic}}</p>
+
+            </div>
+            <div class="project-boxes jsListView">
+                {% for Message in incident_info.TheHistoryOfCommunication  %}
+
+                <div class="project-box-wrapper">
+                    <div class="project-box" style="background-color: #fee4cb;">
+
+
+
+
+
+
+
+                        <div class="box-progress-wrapper" style="max-width: -moz-available;">
+                            <p class="box-progress-header">{{Message.Autor}}</p>
+                            <span>{{Message.Data}}</span>
+                            <div class="box-progress-bar">
+                                <span class="box-progress" style="width: 100%; background-color: #ff942e"></span>
+                            </div>
+                            <div style="white-space: revert;  word-break: break-word;">
+                                {{ Message.html_render|safe}}
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+                {% endfor %}
+
+
+
+
+            </div>
+            <form class="messageBox" method="post" enctype="multipart/form-data" action="{% url 'send_mess' %}">
+                {% csrf_token %}
+                <input value="{{incident_info.uuid}}" required="" name="uuid" type="text" id="uuid" style="display:none">
+                <div class="fileUploadWrapper">
+                    <label for="file">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
+                            <circle stroke-width="20" stroke="#6c6c6c" fill="none" r="158.5" cy="168.5" cx="168.5"></circle>
+                            <path stroke-linecap="round" stroke-width="25" stroke="#6c6c6c" d="M167.759 79V259"></path>
+                            <path stroke-linecap="round" stroke-width="25" stroke="#6c6c6c" d="M79 167.138H259"></path>
+                        </svg>
+                        <span class="tooltip">Добавить файл</span>
+                    </label>
+                    <input type="file" id="file" name="file">
+                </div>
+                <input required="" name="Message" placeholder="Сообщение..." type="text" id="messageInput">
+                <button id="sendButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
+                        <path fill="none" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
+                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="33.67" stroke="#6c6c6c" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <div class="messages-section">
+            <button class="messages-close">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+            </button>
+            <div class="projects-section-header">
+                <p>Информация</p>
+            </div>
+            <div class="messages">
+                <div class="message-box">
+
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="name">Информация о заявке</div>
+
+                        </div>
+                        <p class="message-line">Услуга: {{incident_info.service}}</p>
+                        <p class="message-line">Состав услуги: {{incident_info.serviceComponent}}</p>
+                        <p class="message-line">Тип: {{incident_info.type}}</p>
+                        <p class="message-line">Приоритет: {{incident_info.priority}}</p>
+                        <p class="message-line">Состояние: {{incident_info.state}} </p>
+                        <p class="message-line">Номер: {{incident_info.number}}</p>
+                        <p class="message-line">Очередь: {{incident_info.workgroup}} </p>
+                        <p class="message-line">Исполнитель: {{incident_info.responsible}} </p>
+                        <p class="message-line">Решение: {{incident_info.solution}} </p>
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="message-box">
+
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="name">Время по заявке</div>
+                        </div>
+
+                        <p class="message-line">
+                            Создана: {{incident_info.registrationStartDate}}
+                        </p>
+                        <p class="message-line">
+                            Крайний срок: {{incident_info.deadline}}
+                        </p>
+                        <p class="message-line">
+                            Последнее обновление: {{incident_info.lastModifiedDate}}
+                        </p>
+                        <p class="message-line">
+                            Дата закрытия: {{incident_info.actualClosingDate}}
+                        </p>
+                    </div>
+                </div>
+                <div class="message-box">
+
+                    <div class="message-content">
+                        <div class="message-header">
+                            <div class="name">Вложеные файлы</div>
+                        </div>
+                        {% for File in all_files  %}
+                        <p class="message-line">
+                            <a href="{% url 'Download_File' file_uuid=File.UID %}">{{File.Name}}</a>
+                        </p>
+
+
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+
+
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Подключение JavaScript -->
+<script src="{% static 'app/js/index_script.js' %}"></script>
+
