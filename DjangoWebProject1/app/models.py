@@ -10,6 +10,14 @@ class CustomUser(AbstractUser):
     is_seach = models.BooleanField(default=False)
     preferredTheme = models.CharField(max_length=64, blank=True, null=True)
 
+class Usermanual(models.Model):
+    heading = models.CharField(blank=True, null=True)
+    Text = models.CharField(blank=True, null=True)
+
+class Advertisement(models.Model):
+    heading = models.CharField(blank=True, null=True)
+    Text = models.CharField(blank=True, null=True)
+
 class GlobalSettings(models.Model):
     URL_ITILIUM = models.URLField("URL ITILIUM", default="http://example.com")
     usernameAPI = models.CharField("Username API", max_length=100, default="user")

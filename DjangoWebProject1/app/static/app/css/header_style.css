@@ -766,7 +766,7 @@ input:not(:placeholder-shown) ~ .reset {
 .form button {
     border: none;
     background: none;
-    color: #8b8ba7;
+    color: var(--main-color);
 }
 /* styling of whole input container */
 .form {
@@ -775,7 +775,7 @@ input:not(:placeholder-shown) ~ .reset {
     --height-of-input: 40px;
     --border-height: 2px;
     --input-bg: #fff;
-    --border-color: #2f2ee9;
+    --border-color: #fe6e36;
     --border-radius: 30px;
     --after-border-radius: 1px;
     position: relative;
@@ -786,7 +786,7 @@ input:not(:placeholder-shown) ~ .reset {
     padding-inline: 0.8em;
     border-radius: var(--border-radius);
     transition: border-radius 0.5s ease;
-    background: var(--input-bg,#fff);
+    background: var(--projects-section);
 }
 /* styling of Input */
 .input {
@@ -797,6 +797,7 @@ input:not(:placeholder-shown) ~ .reset {
     padding-inline: 0.5em;
     padding-block: 0.7em;
     border: none;
+    color: var(--main-color);
 }
 /* styling of animated border */
 .form:before {
