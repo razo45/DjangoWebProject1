@@ -9,13 +9,144 @@
 
 @import "https://fonts.googleapis.com/css?family=Montserrat:300,400,700";
 
+.buttonbell {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(254, 110, 54);
+    border-radius: 50%;
+    cursor: pointer;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.13);
+    border: none;
+    float: right;
+}
+
+.bell {
+    width: 18px;
+}
+
+    .bell path {
+        fill: white;
+    }
+
+.buttonbell:hover {
+    background-color: rgb(56, 56, 56);
+}
+
+    .buttonbell:hover .bell {
+        animation: bellRing 0.9s both;
+    }
+
+/* bell ringing animation keyframes*/
+@keyframes bellRing {
+    0%, 100% {
+        transform-origin: top;
+    }
+
+    15% {
+        transform: rotateZ(10deg);
+    }
+
+    30% {
+        transform: rotateZ(-10deg);
+    }
+
+    45% {
+        transform: rotateZ(5deg);
+    }
+
+    60% {
+        transform: rotateZ(-5deg);
+    }
+
+    75% {
+        transform: rotateZ(2deg);
+    }
+}
+
+.buttonbell:active {
+    transform: scale(0.8);
+}
+
+
+.custom-tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-tooltip-btn {
+    padding: 12px 12px;
+    font-size: 1p0x;
+    font-weight: bold;
+    background-color: #fe6e3600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    /*! box-shadow: 0 8px 15px rgba(0, 123, 255, 0.4); */
+    display: ruby-base;
+}
+
+    .custom-tooltip-btn:hover {
+        background-color: ##ff8e62;
+    }
+
+.custom-tooltip-content {
+    position: absolute;
+    bottom: 140%;
+    left: 100%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    width: 240px;
+    background: linear-gradient(135deg, #fe6e36 0%, #ff8e62 100%);
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    border-radius: 15px;
+    transition: all 0.4s ease;
+    z-index: 1;
+    box-shadow: 0px 10px 20px rgba(0, 123, 255, 0.3);
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+}
+
+.custom-tooltip-container:hover .custom-tooltip-content {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.custom-tooltip-arrow {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #007bff;
+}
+
+.custom-tooltip-text {
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+}
+
+
 .rwd-table {
     margin: 1em 0;
     min-width: 300px;
 }
 
     .rwd-table tr {
-        border-top: 1px solid #ddd;
+        border-top: 2px solid #46637f;
         border-bottom: 1px solid #ddd;
     }
 
@@ -72,19 +203,20 @@ body {
     font-family: Montserrat, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    color: #444;
+    color: black;
     background: #eee;
 }
 
 h1 {
     font-weight: normal;
     letter-spacing: -1px;
-    color: #FFF;
+    color: black;
+    font-size: 30px;
 }
 
 .rwd-table {
-    background: #34495E;
-    color: #fff;
+    background: white;
+    color: black;
     border-radius: .4em;
     overflow: hidden;
     width: fit-content;
@@ -105,7 +237,7 @@ h1 {
 }
 
 .rwd-table th, .rwd-table td:before {
-    color: #dd5;
+    color: #27408b;
 }
 
 
@@ -634,7 +766,7 @@ input:not(:placeholder-shown) ~ .reset {
 .form button {
     border: none;
     background: none;
-    color: #8b8ba7;
+    color: var(--main-color);
 }
 /* styling of whole input container */
 .form {
@@ -643,7 +775,7 @@ input:not(:placeholder-shown) ~ .reset {
     --height-of-input: 40px;
     --border-height: 2px;
     --input-bg: #fff;
-    --border-color: #2f2ee9;
+    --border-color: #fe6e36;
     --border-radius: 30px;
     --after-border-radius: 1px;
     position: relative;
@@ -654,7 +786,7 @@ input:not(:placeholder-shown) ~ .reset {
     padding-inline: 0.8em;
     border-radius: var(--border-radius);
     transition: border-radius 0.5s ease;
-    background: var(--input-bg,#fff);
+    background: var(--projects-section);
 }
 /* styling of Input */
 .input {
@@ -665,6 +797,7 @@ input:not(:placeholder-shown) ~ .reset {
     padding-inline: 0.5em;
     padding-block: 0.7em;
     border: none;
+    color: var(--main-color);
 }
 /* styling of animated border */
 .form:before {
@@ -713,6 +846,7 @@ input:not(:placeholder-shown) ~ .reset {
 
 body {
     font-family: Arial, sans-serif;
+    background-color: var(--app-container);
 }
 
 .modal-overlay {
@@ -731,7 +865,7 @@ body {
 }
 
 .modal {
-    background: #34495e;
+    background: white;
     padding: 2rem;
     border-radius: 10px;
     width: fit-content;
