@@ -11,12 +11,18 @@ class CustomUser(AbstractUser):
     preferredTheme = models.CharField(max_length=64, blank=True, null=True)
 
 class Usermanual(models.Model):
-    heading = models.CharField(blank=True, null=True)
-    Text = models.CharField(blank=True, null=True)
+    title = models.CharField("Header", max_length=255)
+    content = models.TextField("Text Sate")
+    created_at = models.DateTimeField("Date create", auto_now_add=True)
+    def __str__(self):
+        return self.title
 
 class Advertisement(models.Model):
-    heading = models.CharField(blank=True, null=True)
-    Text = models.CharField(blank=True, null=True)
+    title = models.CharField("Header", max_length=255)
+    content = models.TextField("Text Sate")
+    created_at = models.DateTimeField("Date create", auto_now_add=True)
+    def __str__(self):
+        return self.title
 
 class GlobalSettings(models.Model):
     URL_ITILIUM = models.URLField("URL ITILIUM", default="http://example.com")

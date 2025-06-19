@@ -103,6 +103,92 @@
 
         </div>
         <div class="messages-section">
+            <div class="tabs" style="padding-top: 10px;padding-right: 40px;padding-left: 10px;padding-bottom: 10px;">
+
+                <input type="radio" id="tab1" name="tab-control" checked="">
+                <input type="radio" id="tab2" name="tab-control">
+
+
+                <ul>
+                    <li title="Features">
+                        <label for="tab1" role="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+                            </svg>
+                            <br><span>Объявления</span>
+                        </label>
+                    </li>
+                    <li title="Delivery Contents">
+                        <label for="tab2" role="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-1" style="width: 35px;">
+                                <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z"></path>
+                            </svg><br><span>Типовые проблемы</span>
+                        </label>
+                    </li>
+
+                </ul>
+
+                <div class="slider"><div class="indicator"></div></div>
+                <div class="content">
+                    <section>
+
+                        <div class="messages">
+                            {% for Advert in Advertisement  %}
+
+                            <div class="message-box">
+
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <div class="name">{{Advert.title}}</div>
+
+                                    </div>
+                                    <p class="message-line">
+                                        {{Advert.content}}
+                                    </p>
+                                    <p class="message-line">{{Advert.created_at}}</p>
+
+                                </div>
+                            </div>
+
+
+
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        </a>
+                    </section>
+                    <section>
+                        <div class="messages">
+
+                            {% for Userm in Usermanual  %}
+
+
+                            <a class="message-box">
+
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <div class="name">{{Userm.title}}</div>
+
+                                    </div>
+                                    <p class="message-line">{{Userm.created_at}}</p>
+                                </div>
+                                </a>
+
+
+                                {% endfor %}
+
+                        </div>
+                    </section>
+
+
+                </div>
+            </div>
+
+
+
             <button class="messages-close">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -110,75 +196,6 @@
                     <line x1="9" y1="9" x2="15" y2="15"></line>
                 </svg>
             </button>
-            <div class="projects-section-header">
-                <p>Типовые проблемы</p>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-1" style="width: 35px;">
-                    <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z"></path>
-                </svg>
-
-            </div>
-            <div class="messages">
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-                <a class="message-box">
-
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="name">Сервис VPN - проблема с доступностью на провайдере МГТС(МТС) </div>
-
-                        </div>
-                    </div>
-                </a>
-
-
-
-
-
-                <div></div>
-            </div>
 
 
         </div>

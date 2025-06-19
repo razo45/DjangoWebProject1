@@ -32,6 +32,9 @@ import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import GlobalSettings
+from .models import Usermanual
+from .models import Advertisement
+
 
 
 settings = GlobalSettings.get_solo()
@@ -432,6 +435,7 @@ def home(request):
     count_open = sum(1 for incident in incidents if incident.get("state") != 'Закрыто' and incident.get("state") != 'Отклонено')
     count_all = len(incidents)
 
+
     return render(
         request,
         'app/index.html',
@@ -444,6 +448,8 @@ def home(request):
             'count_closed': count_closed,
             'count_open': count_open,
             'count_all': count_all,
+            'Advertisement': Advertisement.objects.all(),
+            'Usermanual': Usermanual.objects.all(),
         }
        
 
@@ -502,21 +508,27 @@ def Download_File(request, file_uuid):
 @login_required
 def Open_Ticket(request, ticket_uuid):
     all_incidents = extGetDetailIncidentInfo(ticket_uuid)
-    all_files = all_incidents.get("FilesDefinitions",[])
-    # Раскодируем HTML в каждом сообщении
-    for msg in all_incidents.get("TheHistoryOfCommunication", []):
-        msg["html_render"] = clean_html(msg.get("HTMLText", ""))
-    return render(
-        request, 
-        'app/Open_Ticket.html',
-        {
-            'message': '',
-            "user": request.user,
-            'incident_info': all_incidents,
-            'all_files': all_files,
+    if all_incidents.get('initiatorUuid') == request.user.initiator_uuid or request.user.is_seach:
+        #Open_Ticket/c7199260-4ce3-11f0-90f6-005056171ce9
+        all_files = all_incidents.get("FilesDefinitions",[])
+        # Раскодируем HTML в каждом сообщении
+        for msg in all_incidents.get("TheHistoryOfCommunication", []):
+            msg["html_render"] = clean_html(msg.get("HTMLText", ""))
+        return render(
+            request, 
+            'app/Open_Ticket.html',
+            {
+                'message': '',
+                "user": request.user,
+                'incident_info': all_incidents,
+                'all_files': all_files,
 
-        }
-) # Страница подробной информации о тикете
+            }
+        )
+    else:
+        return redirect("Whoops")
+
+
 
 @login_required
 def logout_view(request):
