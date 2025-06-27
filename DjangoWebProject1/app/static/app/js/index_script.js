@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var projectsList = document.querySelector('.project-boxes');
 
 
-
+     
 
 
 
