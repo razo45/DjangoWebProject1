@@ -27,8 +27,13 @@ urlpatterns = [
     path('get_components/', views.get_components, name='get_components'),
     path('api/services/', views.get_services, name='get_services'),
     path('set-theme/', views.set_theme, name='set_theme'),
-    path('get_KE', views.get_KE, name='get_KE'),
+    path('get_KE/', views.get_KE, name='get_KE'),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path('get_usermanual/<int:pk>/', views.get_usermanual, name='get_usermanual'),
+
 
     # ADFS
     path('oauth2/', include('django_auth_adfs.urls')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

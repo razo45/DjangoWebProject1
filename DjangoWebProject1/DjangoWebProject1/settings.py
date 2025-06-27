@@ -14,7 +14,7 @@ import os
 import posixpath
 import ldap
 from django_auth_ldap.config import LDAPSearch
-
+from pathlib import Path
 
 
 AUTH_LDAP_SERVER_URI = "ldap://10.201.42.10"  # ← замените на адрес вашего AD-сервера
@@ -37,7 +37,7 @@ AUTH_LDAP_USER_DN_TEMPLATE = "%(user)s@solar.local"
 AUTH_USER_MODEL = 'app.CustomUser'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_URL = "/login/"  # Куда редиректить неавторизованных пользователей
 LOGIN_REDIRECT_URL = '/'
 # Quick-start development settings - unsuitable for production
@@ -49,7 +49,7 @@ SECRET_KEY = '186e9c5f-0d7f-4e06-9c32-d26d5d1fe87c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_auth_adfs',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 # Middleware framework
@@ -76,6 +78,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}
 
 ROOT_URLCONF = 'DjangoWebProject1.urls'
 
@@ -153,8 +166,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATIC_ROOT = BASE_DIR / 'static'

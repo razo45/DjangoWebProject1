@@ -127,6 +127,21 @@ def get_initiator_code(data): # Получение UUID пользователя
     except json.JSONDecodeError:
         return None 
 
+def get_initiator_FIO(data): # Получение UUID пользователя из getInitiators1 
+    try:
+        # Преобразуем строку JSON в словарь
+        parsed_data = json.loads(data)
+        
+        # Проверяем, что ключ "Initiators" существует и не пуст
+        if "Initiators" in parsed_data and parsed_data["Initiators"]:
+            # Извлекаем InitiatorUuid первого элемента
+            initiator_FIO = parsed_data["Initiators"][0].get("Initiator")
+            return initiator_FIO
+        else:
+            return None  # Если в "Initiators" нет данных
+    except json.JSONDecodeError:
+        return None 
+
 def get_Client_uuid(data): # Получение UUID пользователя из getInitiators1 
     try:
         # Преобразуем строку JSON в словарь
@@ -392,6 +407,7 @@ def send_mess(request):
             "Action" : "AddNewCommunicationWithFile",
             "IncUuid" : uuid,
             "Commentary" : Mess,
+            "User" : request.user.initiator_FIO,
             "Files" : files_payload
 
         }
@@ -416,7 +432,15 @@ def send_mess(request):
 
 
             
-
+def get_usermanual(request, pk):
+    try:
+        manual = Usermanual.objects.get(pk=pk)
+        return JsonResponse({
+            'title': manual.title,
+            'content': manual.content
+        })
+    except Usermanual.DoesNotExist:
+        return JsonResponse({'error': 'Не найдено'}, status=404)
 
 
 
@@ -458,7 +482,8 @@ def home(request):
 @login_required
 def Open_Ticket_Search(request):
     if request.user.is_seach:
-        num = request.GET.get("uuid")
+        number = request.GET.get("uuid")
+        num = str(number).zfill(10)
         if num:
 
 
@@ -551,6 +576,7 @@ def login_view(request):
             user.initiator_uuid = get_initiator_uuid(data)
             user.Client_uuid = get_Client_uuid(data)
             user.initiator_code = get_initiator_code(data)
+            user.initiator_FIO = get_initiator_FIO(data)
             user.save()
 
             login(request, user)

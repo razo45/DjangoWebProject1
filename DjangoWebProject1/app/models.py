@@ -1,19 +1,22 @@
-"""
+﻿"""
 Definition of models.
 """
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 class CustomUser(AbstractUser):
     initiator_uuid = models.CharField(max_length=64, blank=True, null=True)
     initiator_code = models.CharField(max_length=64, blank=True, null=True)
+    initiator_FIO = models.CharField(max_length=128, blank=True, null=True)
     Client_uuid = models.CharField(max_length=64, blank=True, null=True)
     is_seach = models.BooleanField(default=False)
     preferredTheme = models.CharField(max_length=64, blank=True, null=True)
 
 class Usermanual(models.Model):
-    title = models.CharField("Header", max_length=255)
-    content = models.TextField("Text Sate")
+    title = models.CharField("header", max_length=255)
+    content = RichTextUploadingField("Content")  
     created_at = models.DateTimeField("Date create", auto_now_add=True)
+
     def __str__(self):
         return self.title
 
@@ -25,7 +28,7 @@ class Advertisement(models.Model):
         return self.title
 
 class GlobalSettings(models.Model):
-    URL_ITILIUM = models.URLField("URL ITILIUM", default="http://example.com")
+    URL_ITILIUM = models.CharField("URL ITILIUM", default="http://example.com")
     usernameAPI = models.CharField("Username API", max_length=100, default="user")
     passwordAPI = models.CharField("Passowd API", max_length=100, default="password")
 

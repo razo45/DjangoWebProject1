@@ -99,6 +99,8 @@
 
                         });
                 }
+
+
             </script>
 
         </div>
@@ -166,7 +168,7 @@
                             {% for Userm in Usermanual  %}
 
 
-                            <a class="message-box">
+                            <a class="message-box" href="#" onclick="openUserManual({{ Userm.id }}); return false;">
 
                                 <div class="message-content">
                                     <div class="message-header">
@@ -175,10 +177,10 @@
                                     </div>
                                     <p class="message-line">{{Userm.created_at}}</p>
                                 </div>
-                                </a>
+                            </a>
 
 
-                                {% endfor %}
+                            {% endfor %}
 
                         </div>
                     </section>
@@ -200,7 +202,19 @@
 
         </div>
     </div>
+    <div id="manualModal" class="modal-overlay" style="display: flex;padding-left: 20%;padding-right: 20%;padding-top: 50px;padding-bottom: 50px;">
+        <div class="modal">
+            <button class="buttonbell" onclick="closeManual()" style="padding-top: 4px;padding-bottom: 4px;">
+                <svg class="bell" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="color: white;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <h2 id="manualTitle"></h2>
+            <div id="manualContent" style="max-height:700px; overflow:auto;"></div>
+        </div>
+    </div>
 </div>
+
 
 
 <!-- Подключение JavaScript -->

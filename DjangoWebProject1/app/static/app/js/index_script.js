@@ -1,14 +1,17 @@
-document.addEventListener('DOMContentLoaded', function () {
-    //var modeSwitch = document.querySelector('.mode-switch');
 
-    //modeSwitch.addEventListener('click', function () {
-    //    document.documentElement.classList.toggle('dark');
-    //    modeSwitch.classList.toggle('active');
-    //});
+const overlayManual = document.getElementById('manualModal');
+
+document.addEventListener('DOMContentLoaded', function () {
+
 
     var listView = document.querySelector('.list-view');
     var gridView = document.querySelector('.grid-view');
     var projectsList = document.querySelector('.project-boxes');
+
+
+
+
+
 
     listView.addEventListener('click', function () {
         gridView.classList.remove('active');
@@ -32,3 +35,25 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.messages-section').classList.remove('show');
     });
 });
+
+
+
+
+function openUserManual(id) {
+    console.log(id)
+    overlayManual.classList.remove('closing');
+    overlayManual.classList.add('active');
+    // Очистим старые опции
+
+    fetch(`/get_usermanual/${id}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("manualTitle").innerText = data.title;
+            document.getElementById("manualContent").innerHTML = data.content;
+            document.getElementById("manualModal").style.display = "flex";
+        });
+}
+
+function closeManual() {
+    document.getElementById("manualModal").style.display = "none";
+}

@@ -4,10 +4,17 @@ document.querySelector('.more-button').addEventListener('click', function () {
 
 const openBtn = document.getElementById('openModalBtn');
 const openBtn2 = document.getElementById('openModal2Btn');
+
+
 const closeBtn = document.getElementById('closeModalBtn');
 const closeBtn2 = document.getElementById('closeModal2Btn');
+
+
 const overlay = document.getElementById('modalOverlay');
 const overlay2 = document.getElementById('modalOverlay2');
+
+
+
 
 openBtn.addEventListener('click', () => {
     overlay.classList.remove('closing');
